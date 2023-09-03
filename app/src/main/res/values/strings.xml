@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">SmartHome Gesture Control Application-Part1 - Miguel Castillo</string>
+    <string name="startButton">START</string>
+    <string name="mainScreenHeader">SmartHome Gesture Control App</string>
+    <string name="subHeader">Choose a Gesture below:</string>
+
+    <string name="secondScreenHeader">Demo Video</string>
+
+    //Common strings
+    <string name="practiceButton">PRACTICE</string>
+    <string name="restartButton">RESTART</string>
+
+    <string name="uploadButton">UPLOAD</string>
+
+    <string-array name="gestureSelectionList">
+        <item>Turn On Light</item>
+        <item>Turn Off Light</item>
+        <item>Turn On Fan"</item>
+        <item>Turn Off Fan"</item>
+        <item>Increase Fan Speed"</item>
+        <item>Decrease Fan Speed"</item>
+        <item>Set Thermostat to specified temperature"</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
 </resources>

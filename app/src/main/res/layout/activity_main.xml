@@ -7,9 +7,10 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SmartHome Gesture Control App"
+        android:text="@string/mainScreenHeader"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,27 +19,42 @@
         app:layout_constraintVertical_bias="0.051" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/dropdown_spinner"
         android:layout_width="307dp"
         android:layout_height="24dp"
-        tools:layout_editor_absoluteX="52dp"
-        tools:layout_editor_absoluteY="162dp" />
+        android:layout_marginStart="61dp"
+        android:layout_marginTop="122dp"
+        android:layout_marginEnd="43dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose a Gesture Below:"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="127dp"
+        android:text="@string/subHeader"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        tools:layout_editor_absoluteX="127dp"
-        tools:layout_editor_absoluteY="77dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="START"
-        tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="260dp" />
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="341dp"
+        android:layout_marginEnd="148dp"
+        android:layout_marginBottom="100dp"
+        android:text="@string/startButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dropdown_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

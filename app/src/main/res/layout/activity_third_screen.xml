@@ -5,18 +5,34 @@
     android:layout_height="match_parent">
 
     <VideoView
-        android:id="@+id/videoView2"
+        android:id="@+id/practiceVideoView"
         android:layout_width="315dp"
         android:layout_height="519dp"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="26dp" />
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="28dp" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/uploadButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="UPLOAD"
-        tools:layout_editor_absoluteX="154dp"
-        tools:layout_editor_absoluteY="601dp" />
+        tools:layout_editor_absoluteX="275dp"
+        tools:layout_editor_absoluteY="637dp" />
+
+    <Button
+        android:id="@+id/restartButtonScreen3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/restartButton"
+        tools:layout_editor_absoluteX="35dp"
+        tools:layout_editor_absoluteY="637dp" />
+
+    <Button
+        android:id="@+id/practiceButtonScreen3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/practiceButton"
+        tools:layout_editor_absoluteX="151dp"
+        tools:layout_editor_absoluteY="637dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
