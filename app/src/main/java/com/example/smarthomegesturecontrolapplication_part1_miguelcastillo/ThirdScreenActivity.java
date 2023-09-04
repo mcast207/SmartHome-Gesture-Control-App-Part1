@@ -5,26 +5,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
-import androidx.core.content.ContextCompat;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
-
 import java.io.File;
 import java.io.IOException;
-
-import android.os.Environment;
-
-import androidx.core.content.FileProvider;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -34,21 +23,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 public class ThirdScreenActivity extends AppCompatActivity {
     String practiceFileNameGesture;
-    String filenameGesture;
-    File practiceFileVideo;
-    String practiceVideoFileName;
-    String practiceVideoPath;
-    Button uploadButton;
     Button restartButton;
-    Button practiceButton;
     String userLastName = "CASTILLO";
     Uri practiceVideoUri;
     VideoView practiceVideoView;
-
-    int option = 1;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -56,11 +36,9 @@ public class ThirdScreenActivity extends AppCompatActivity {
 
         practiceFileNameGesture = getIntent().getStringExtra("practice gesture file name");
 
-        String practiceVideoFileName = practiceFileNameGesture + "_PRACTICE_" + userLastName + ".mp4";
-
-
         //Display third screen after recording practice video
         setContentView(R.layout.activity_third_screen);
+
         //Play recorded practice video
         practiceVideoView = findViewById(R.id.practiceVideoView);
 
@@ -70,15 +48,6 @@ public class ThirdScreenActivity extends AppCompatActivity {
         practiceVideoView.requestFocus();
         practiceVideoView.start();
 
-        //Create buttons
-//        uploadButton = findViewById(R.id.uploadButton);
-//        uploadButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                videoUploadToServer();
-//                finish();
-//            }
-//        });
         restartButton = findViewById(R.id.restartButtonScreen3);
         Intent intent = new Intent(ThirdScreenActivity.this, MainActivity.class);
         restartButton.setOnClickListener(v -> startActivity(intent));
@@ -95,13 +64,6 @@ public class ThirdScreenActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(permissions, 1);
                 }
-//                progressText.setVisibility(View.VISIBLE);
-//                if (counterMap.get(gesture_text) == null) {
-//                    counterMap.put(gesture_text, 1);
-//                } else {
-//                    Integer num = counterMap.get(gesture_text);
-//                    counterMap.put(gesture_text, num + 1);
-//                }
 
                 String postUrl = "http://" + "192.168.1.67" + ":" + "5000" + "/";
 
@@ -155,6 +117,4 @@ public class ThirdScreenActivity extends AppCompatActivity {
         });
 
     }
-
-//
 }

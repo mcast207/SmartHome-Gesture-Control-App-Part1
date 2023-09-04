@@ -8,31 +8,16 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Build;
 import android.content.Intent;
 import android.media.MediaPlayer;
-
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.VideoView;
-
-import android.net.Uri;
-
 import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import java.io.File;
 
@@ -42,8 +27,6 @@ public class SecondScreenActivity extends AppCompatActivity {
     String practiceFileNameGesture;
     String demoVideoPath;
     String filePath;
-    int demoVideoReplayCount = 0;
-
     VideoView demoVideoView;
     Button practiceButton;
     Button restartButton;
@@ -58,6 +41,7 @@ public class SecondScreenActivity extends AppCompatActivity {
         Intent intent = getIntent();
         gestureAction = intent.getStringExtra("Gesture Name");
 
+        //Set demo and practice file names
         videoAndFileName(gestureAction);
 
         //Display corresponding demo video
@@ -65,7 +49,6 @@ public class SecondScreenActivity extends AppCompatActivity {
         demoVideoPath = "android.resource://" + getPackageName() + "/raw/" + demoFileName;
         demoVideoView.setVideoURI(Uri.parse(demoVideoPath));
         demoVideoView.start();
-
         demoVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
@@ -73,37 +56,19 @@ public class SecondScreenActivity extends AppCompatActivity {
 
             }
         });
-//
-//        //Buttons
+
+
         practiceButton = findViewById(R.id.practiceButtonScreen2);
         practiceButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-//                Intent intent = new Intent(SecondScreenActivity.this, ThirdScreenActivity.class);
-////            intent.putExtra("Gesture Name", gestureAction);
-//                intent.putExtra("Practice Gesture File Name", practiceFileNameGesture);
-//                startActivity(intent);
                 recordPracticeVideo(v);
-
             }
         });
-//        practiceButton.setOnClickListener(new View.OnClickListener(){
-////            practiceFileName = gestureName + "_PRACTICE_" + practiceNum + userName + ".mp4";
-//            @Override
-//            public void onClick(View v){
-//                Intent intent = new Intent(SecondScreenActivity.this, ThirdScreenActivity.class);
-//                intent.putExtra("Gesture Name", gestureName);
-//                startActivity(intent);
-//
-//            }
-//        });
 
         restartButton = findViewById(R.id.restartButtonScreen2);
         Intent intent2 = new Intent(SecondScreenActivity.this, MainActivity.class);
         restartButton.setOnClickListener(v -> startActivity(intent2));
-
-
-
     }
     public void videoAndFileName(String gestureAction){
         switch (gestureAction){
@@ -202,10 +167,8 @@ public class SecondScreenActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         100);
             }
-
         }
         else {
-
             File file = new File(Environment.getExternalStorageDirectory(), "projectVideos");
 
             if (!file.exists()) {
@@ -213,23 +176,17 @@ public class SecondScreenActivity extends AppCompatActivity {
             }
 
             File practiceFileVideo = new File(Environment.getExternalStorageDirectory().getPath() + "/projectVideos/" +  practiceFileNameGesture + "_PRACTICE_" + ".mp4");
-
             Intent recordPracticeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+            recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
         recordPracticeVideo.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
         recordPracticeVideo.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
             recordPracticeVideo.putExtra(MediaStore.EXTRA_OUTPUT, practiceFileVideo.getPath());
             recordPracticeVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);//Record for max 5 seconds
             recordPracticeVideo.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//Record for max 5 seconds
             recordPracticeVideo.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);//Record for max 5 seconds
-
-//        practiceVideoUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.smarthomegesturecontrolapplication_part1_miguelcastillo.provider", practiceFileVideo);
-//        recordPracticeVideo.putExtra(MediaStore.EXTRA_OUTPUT, practiceVideoUri);
             startActivityForResult(recordPracticeVideo, 101);
         }
-
     }
-
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101) {
@@ -261,6 +218,4 @@ public class SecondScreenActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }

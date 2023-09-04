@@ -1,10 +1,8 @@
 package com.example.smarthomegesturecontrolapplication_part1_miguelcastillo;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -13,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-
     int duration = Toast.LENGTH_SHORT;
     String gestureName;
 
@@ -44,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
     }
-
-
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
         gestureName = parent.getItemAtPosition(position).toString();
@@ -55,5 +49,4 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> parent){
         //Do nothing
     }
-
 }
