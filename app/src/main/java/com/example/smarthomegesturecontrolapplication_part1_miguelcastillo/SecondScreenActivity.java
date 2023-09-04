@@ -2,11 +2,18 @@ package com.example.smarthomegesturecontrolapplication_part1_miguelcastillo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
 import android.content.Intent;
 import android.media.MediaPlayer;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -16,13 +23,27 @@ import android.net.Uri;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import java.io.File;
 
 public class SecondScreenActivity extends AppCompatActivity {
     String gestureAction;
     String demoFileName;
     String practiceFileNameGesture;
     String demoVideoPath;
+    String filePath;
     int demoVideoReplayCount = 0;
+
     VideoView demoVideoView;
     Button practiceButton;
     Button restartButton;
@@ -52,28 +73,17 @@ public class SecondScreenActivity extends AppCompatActivity {
 
             }
         });
-        //Replay demo video 3 times
-//        demoVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            int maxReplayCount =3;
-//            @Override
-//            public void onCompletion(MediaPlayer mediaPlayer) {
-//                if(demoVideoReplayCount < maxReplayCount){
-//                    demoVideoReplayCount++;
-//                    mediaPlayer.seekTo(0);
-//                    mediaPlayer.start();
-//                }
-//            }
-//        });
-
-        //Buttons
+//
+//        //Buttons
         practiceButton = findViewById(R.id.practiceButtonScreen2);
         practiceButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(SecondScreenActivity.this, ThirdScreenActivity.class);
-//            intent.putExtra("Gesture Name", gestureAction);
-                intent.putExtra("Practice Gesture File Name", practiceFileNameGesture);
-                startActivity(intent);
+//                Intent intent = new Intent(SecondScreenActivity.this, ThirdScreenActivity.class);
+////            intent.putExtra("Gesture Name", gestureAction);
+//                intent.putExtra("Practice Gesture File Name", practiceFileNameGesture);
+//                startActivity(intent);
+                recordPracticeVideo(v);
 
             }
         });
@@ -168,5 +178,89 @@ public class SecondScreenActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public void recordPracticeVideo(View view) {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        101);
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        100);
+            }
+
+        }
+        else {
+
+            File file = new File(Environment.getExternalStorageDirectory(), "projectVideos");
+
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+
+            File practiceFileVideo = new File(Environment.getExternalStorageDirectory().getPath() + "/projectVideos/" +  practiceFileNameGesture + "_PRACTICE_" + ".mp4");
+
+            Intent recordPracticeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+        recordPracticeVideo.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+        recordPracticeVideo.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+            recordPracticeVideo.putExtra(MediaStore.EXTRA_OUTPUT, practiceFileVideo.getPath());
+            recordPracticeVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);//Record for max 5 seconds
+            recordPracticeVideo.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//Record for max 5 seconds
+            recordPracticeVideo.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);//Record for max 5 seconds
+
+//        practiceVideoUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.smarthomegesturecontrolapplication_part1_miguelcastillo.provider", practiceFileVideo);
+//        recordPracticeVideo.putExtra(MediaStore.EXTRA_OUTPUT, practiceVideoUri);
+            startActivityForResult(recordPracticeVideo, 101);
+        }
+
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101) {
+            String practiceVideoFileName = practiceFileNameGesture + "_PRACTICE_" + "CASTILLO" + ".mp4";
+            Uri VideoUri = data.getData();
+            filePath = getPathFromURI(getApplicationContext(), VideoUri );
+            Intent displayIntent = new Intent(getApplicationContext(),ThirdScreenActivity.class);
+            displayIntent.putExtra("file path", filePath);
+            displayIntent.putExtra("gesture name", gestureAction);
+            displayIntent.putExtra("practice gesture file name", practiceFileNameGesture);
+            displayIntent.putExtra("videoUri", VideoUri.toString());
+            startActivity(displayIntent);
+        }
+    }
+    public String getPathFromURI(Context context, Uri contentUri) {
+        if ( contentUri.toString().indexOf("file:///") > -1 ){
+            return contentUri.getPath();
+        }
+        Cursor thisCursor = null;
+        try {
+            String[] temp = { MediaStore.Images.Media.DATA };
+            thisCursor = context.getContentResolver().query(contentUri,  temp, null, null, null);
+            int column_index = thisCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            thisCursor.moveToFirst();
+            return thisCursor.getString(column_index);
+        }finally {
+            if (thisCursor != null) {
+                thisCursor.close();
+            }
+        }
+    }
+
 
 }
