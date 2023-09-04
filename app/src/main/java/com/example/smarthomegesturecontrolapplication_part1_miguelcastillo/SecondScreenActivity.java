@@ -61,12 +61,12 @@ public class SecondScreenActivity extends AppCompatActivity {
         //Buttons
         practiceButton = findViewById(R.id.practiceButtonScreen2);
         practiceButton.setOnClickListener(new View.OnClickListener(){
-           @Override
-           public void onClick(View v){
-            Intent intent = new Intent(SecondScreenActivity.this, ThirdScreenActivity.class);
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(SecondScreenActivity.this, ThirdScreenActivity.class);
 //            intent.putExtra("Gesture Name", gestureAction);
-            intent.putExtra("Practice Gesture File Name", practiceFileNameGesture);
-            startActivity(intent);
+                intent.putExtra("Practice Gesture File Name", practiceFileNameGesture);
+                startActivity(intent);
 
             }
         });
