@@ -98,6 +98,7 @@ public class ThirdScreenActivity extends AppCompatActivity {
 
         Intent recordPracticeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         recordPracticeVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);//Record for max 5 seconds
+        recordPracticeVideo.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);//Record for max 5 seconds
 
         savedPracticeVideoLocation = FileProvider.getUriForFile(getApplicationContext(), "com.example.smarthomegesturecontrolapplication_part1_miguelcastillo.provider", practiceFileVideo);
         recordPracticeVideo.putExtra(MediaStore.EXTRA_OUTPUT, savedPracticeVideoLocation);
@@ -110,16 +111,26 @@ public class ThirdScreenActivity extends AppCompatActivity {
         }
 
     }
+
     private final ActivityResultLauncher<Intent> videoActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 savedPracticeVideoLocation = result.getData().getData();
                 practiceVideoView.setVideoURI(savedPracticeVideoLocation);
+//                practiceVideoView.start();
+
+                practiceVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
                 practiceVideoView.start();
+                        mediaPlayer.setLooping(true);
+                    }
+                });
             }
         }
     });
+
 //    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 //        super.onActivityResult(requestCode, resultCode, intent);
 //

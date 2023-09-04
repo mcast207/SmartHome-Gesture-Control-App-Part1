@@ -45,18 +45,25 @@ public class SecondScreenActivity extends AppCompatActivity {
         demoVideoView.setVideoURI(Uri.parse(demoVideoPath));
         demoVideoView.start();
 
-        //Replay demo video 3 times
-        demoVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            int maxReplayCount =3;
+        demoVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                if(demoVideoReplayCount < maxReplayCount){
-                    demoVideoReplayCount++;
-                    mediaPlayer.seekTo(0);
-                    mediaPlayer.start();
-                }
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setLooping(true);
+
             }
         });
+        //Replay demo video 3 times
+//        demoVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            int maxReplayCount =3;
+//            @Override
+//            public void onCompletion(MediaPlayer mediaPlayer) {
+//                if(demoVideoReplayCount < maxReplayCount){
+//                    demoVideoReplayCount++;
+//                    mediaPlayer.seekTo(0);
+//                    mediaPlayer.start();
+//                }
+//            }
+//        });
 
         //Buttons
         practiceButton = findViewById(R.id.practiceButtonScreen2);
