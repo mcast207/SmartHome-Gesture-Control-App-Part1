@@ -1,5 +1,6 @@
 package com.example.smarthomegesturecontrolapplication_part1_miguelcastillo;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -87,7 +88,7 @@ public class ThirdScreenActivity extends AppCompatActivity {
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("image",
                                     practiceFileNameGesture + "_PRACTICE_"  +
-                                            "_"+ userLastName + ".mp4", RequestBody.create(MediaType.parse("video/*"), streamData))
+                                            getPracticeNumber(practiceFileNameGesture) + "_" + userLastName + ".mp4", RequestBody.create(MediaType.parse("video/*"), streamData))
                             .build();
 
                 } catch (Exception ioexp) {
@@ -127,5 +128,24 @@ public class ThirdScreenActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public int getPracticeNumber(String practiceFileNameGesture){
+        SharedPreferences preferences = getSharedPreferences("practiceNumberPreference", MODE_PRIVATE);
+
+        int practiceCounter = 0;
+
+        if(preferences.contains(practiceFileNameGesture)){
+            practiceCounter= preferences.getInt(practiceFileNameGesture,0)+1;
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(practiceFileNameGesture,practiceCounter);
+            editor.apply();
+        }else{
+            practiceCounter=1;
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(practiceFileNameGesture,practiceCounter);
+            editor.apply();
+        }
+        return practiceCounter;
     }
 }

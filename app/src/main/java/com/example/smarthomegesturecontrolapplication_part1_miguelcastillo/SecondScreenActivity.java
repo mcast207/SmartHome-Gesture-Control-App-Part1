@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,6 +27,7 @@ public class SecondScreenActivity extends AppCompatActivity {
     String practiceFileNameGesture;
     String demoVideoPath;
     String filePathRecordedVideo;
+    String userLastName = "CASTILLO";
     VideoView demoVideoView;
     Button practiceButton;
     Button restartButton;
@@ -174,7 +176,7 @@ public class SecondScreenActivity extends AppCompatActivity {
                 file.mkdirs();
             }
 
-            File practiceFileVideo = new File(Environment.getExternalStorageDirectory().getPath() + "/projectVideos/" +  practiceFileNameGesture + "_PRACTICE_" + ".mp4");
+            File practiceFileVideo = new File(Environment.getExternalStorageDirectory().getPath() + "/projectVideos/" + practiceFileNameGesture + "_PRACTICE_" +  userLastName + ".mp4");
             Intent recordPracticeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 //            recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
 //        recordPracticeVideo.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
@@ -216,4 +218,6 @@ public class SecondScreenActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }
