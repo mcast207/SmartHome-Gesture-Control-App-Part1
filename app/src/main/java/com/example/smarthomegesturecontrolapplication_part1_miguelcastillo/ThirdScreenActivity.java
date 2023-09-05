@@ -77,7 +77,7 @@ public class ThirdScreenActivity extends AppCompatActivity {
                 }
 
                 //Flask will resolve this ip address
-                String postUrl = "http://" + "192.168.1.67" + ":" + "5000" + "/";
+                String postUrl = "http://" + "192.168.1.67" + ":" + "5000" + "/uploadVideo";
 
                 File streamData = null;
                 RequestBody postBody = null;
