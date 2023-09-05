@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(SecondScreenActivity);
             }
         });
-
     }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id){

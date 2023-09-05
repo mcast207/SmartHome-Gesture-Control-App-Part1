@@ -9,6 +9,7 @@
     //Common strings
     <string name="practiceButton">PRACTICE</string>
     <string name="restartButton">RESTART</string>
+    <string name="relearnButton">RESTART</string>
 
     <string name="uploadButton">UPLOAD</string>
 

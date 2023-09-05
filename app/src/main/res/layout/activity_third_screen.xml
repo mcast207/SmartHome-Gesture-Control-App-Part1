@@ -35,10 +35,10 @@
             android:text="@string/restartButton" />
 
         <Button
-            android:id="@+id/practiceButtonScreen3"
+            android:id="@+id/relearnButton"
             android:layout_width="136dp"
             android:layout_height="wrap_content"
-            android:text="@string/practiceButton" />
+            android:text="RELEARN" />
 
         <Button
             android:id="@+id/uploadButton"

@@ -18,7 +18,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.io.File;
 
 public class SecondScreenActivity extends AppCompatActivity {
@@ -26,7 +25,7 @@ public class SecondScreenActivity extends AppCompatActivity {
     String demoFileName;
     String practiceFileNameGesture;
     String demoVideoPath;
-    String filePath;
+    String filePathRecordedVideo;
     VideoView demoVideoView;
     Button practiceButton;
     Button restartButton;
@@ -52,23 +51,23 @@ public class SecondScreenActivity extends AppCompatActivity {
         demoVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.setLooping(true);
+                mediaPlayer.setLooping(true);//loop video playback forever
 
             }
         });
-
 
         practiceButton = findViewById(R.id.practiceButtonScreen2);
         practiceButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                //open camera to record
                 recordPracticeVideo(v);
             }
         });
 
         restartButton = findViewById(R.id.restartButtonScreen2);
-        Intent intent2 = new Intent(SecondScreenActivity.this, MainActivity.class);
-        restartButton.setOnClickListener(v -> startActivity(intent2));
+        Intent backToMainIntent = new Intent(SecondScreenActivity.this, MainActivity.class);
+        restartButton.setOnClickListener(v -> startActivity(backToMainIntent));
     }
     public void videoAndFileName(String gestureAction){
         switch (gestureAction){
@@ -177,9 +176,9 @@ public class SecondScreenActivity extends AppCompatActivity {
 
             File practiceFileVideo = new File(Environment.getExternalStorageDirectory().getPath() + "/projectVideos/" +  practiceFileNameGesture + "_PRACTICE_" + ".mp4");
             Intent recordPracticeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
-        recordPracticeVideo.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
-        recordPracticeVideo.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+//            recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+//        recordPracticeVideo.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+//        recordPracticeVideo.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
             recordPracticeVideo.putExtra(MediaStore.EXTRA_OUTPUT, practiceFileVideo.getPath());
             recordPracticeVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);//Record for max 5 seconds
             recordPracticeVideo.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//Record for max 5 seconds
@@ -190,25 +189,24 @@ public class SecondScreenActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101) {
-            String practiceVideoFileName = practiceFileNameGesture + "_PRACTICE_" + "CASTILLO" + ".mp4";
-            Uri VideoUri = data.getData();
-            filePath = getPathFromURI(getApplicationContext(), VideoUri );
+            Uri originalRecordedVideo = data.getData();
+            filePathRecordedVideo = getPathFromRecordedVideoUri(getApplicationContext(), originalRecordedVideo );
             Intent displayIntent = new Intent(getApplicationContext(),ThirdScreenActivity.class);
-            displayIntent.putExtra("file path", filePath);
+            displayIntent.putExtra("file path", filePathRecordedVideo);
             displayIntent.putExtra("gesture name", gestureAction);
             displayIntent.putExtra("practice gesture file name", practiceFileNameGesture);
-            displayIntent.putExtra("videoUri", VideoUri.toString());
+            displayIntent.putExtra("videoUri", originalRecordedVideo.toString());
             startActivity(displayIntent);
         }
     }
-    public String getPathFromURI(Context context, Uri contentUri) {
-        if ( contentUri.toString().indexOf("file:///") > -1 ){
-            return contentUri.getPath();
+    public String getPathFromRecordedVideoUri(Context context, Uri contentVideoUri) {
+        if ( contentVideoUri.toString().indexOf("file:///") > -1 ){
+            return contentVideoUri.getPath();
         }
         Cursor thisCursor = null;
         try {
-            String[] temp = { MediaStore.Images.Media.DATA };
-            thisCursor = context.getContentResolver().query(contentUri,  temp, null, null, null);
+            String[] tempData = { MediaStore.Images.Media.DATA };
+            thisCursor = context.getContentResolver().query(contentVideoUri,  tempData, null, null, null);
             int column_index = thisCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             thisCursor.moveToFirst();
             return thisCursor.getString(column_index);

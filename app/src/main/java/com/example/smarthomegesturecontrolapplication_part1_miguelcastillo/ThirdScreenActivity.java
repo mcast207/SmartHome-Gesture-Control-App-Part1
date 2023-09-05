@@ -26,6 +26,8 @@ import okhttp3.Response;
 public class ThirdScreenActivity extends AppCompatActivity {
     String practiceFileNameGesture;
     Button restartButton;
+    Button uploadButton;
+    Button relearnButton;
     String userLastName = "CASTILLO";
     Uri practiceVideoUri;
     VideoView practiceVideoView;
@@ -34,6 +36,7 @@ public class ThirdScreenActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
 
+        //Get the gesture file name
         practiceFileNameGesture = getIntent().getStringExtra("practice gesture file name");
 
         //Display third screen after recording practice video
@@ -42,6 +45,7 @@ public class ThirdScreenActivity extends AppCompatActivity {
         //Play recorded practice video
         practiceVideoView = findViewById(R.id.practiceVideoView);
 
+        //Logic to display recorded video on third screen
         practiceVideoUri = Uri.parse(getIntent().getStringExtra("videoUri"));
         practiceVideoView.setVideoURI(practiceVideoUri);
         practiceVideoView.setMediaController(new MediaController(this));
@@ -49,34 +53,41 @@ public class ThirdScreenActivity extends AppCompatActivity {
         practiceVideoView.start();
 
         restartButton = findViewById(R.id.restartButtonScreen3);
-        Intent intent = new Intent(ThirdScreenActivity.this, MainActivity.class);
-        restartButton.setOnClickListener(v -> startActivity(intent));
+        Intent backToMainIntent = new Intent(ThirdScreenActivity.this, MainActivity.class);
+        restartButton.setOnClickListener(v -> startActivity(backToMainIntent));
+
+        relearnButton = findViewById(R.id.relearnButton);
+        Intent backToSecondScreen = new Intent(ThirdScreenActivity.this, SecondScreenActivity.class);
+        relearnButton.setOnClickListener(v -> startActivity(backToSecondScreen));
+
+        uploadButton = findViewById(R.id.uploadButton);
+
         httpMultiFromRequestBody(getIntent().getStringExtra("file path"));
     }
 
     public void httpMultiFromRequestBody(String videoUri){
-        Button upload_video = findViewById(R.id.uploadButton);
-        upload_video.setOnClickListener(new View.OnClickListener() {
+        uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if(checkUploadCount()) {
+                //Check permission of device
                 String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(permissions, 1);
                 }
 
+                //Flask will resolve this ip address
                 String postUrl = "http://" + "192.168.1.67" + ":" + "5000" + "/";
 
-                File stream = null;
-                RequestBody postBodyImage = null;
+                File streamData = null;
+                RequestBody postBody = null;
                 try {
-                    stream = new File(videoUri);
+                    streamData = new File(videoUri);
 
-                    postBodyImage = new MultipartBody.Builder()
+                    postBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("image",
                                     practiceFileNameGesture + "_PRACTICE_"  +
-                                            "_"+ "CASTILLO" + ".mp4", RequestBody.create(MediaType.parse("video/*"), stream))
+                                            "_"+ userLastName + ".mp4", RequestBody.create(MediaType.parse("video/*"), streamData))
                             .build();
 
                 } catch (Exception ioexp) {
@@ -86,7 +97,7 @@ public class ThirdScreenActivity extends AppCompatActivity {
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
                         .url(postUrl)
-                        .post(postBodyImage)
+                        .post(postBody)
                         .build();
                 client.newCall(request).enqueue(new Callback() {
                     @Override
@@ -95,17 +106,17 @@ public class ThirdScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ThirdScreenActivity.this, "Connection was not established", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ThirdScreenActivity.this, "ERROR: Connection was not established", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
 
                     @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
+                    public void onResponse(Call callback, final Response response) throws IOException {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ThirdScreenActivity.this, "Video uploaded into server", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ThirdScreenActivity.this, "Video successfully uploaded!", Toast.LENGTH_SHORT).show();
                                 Intent backToSquareOne = new Intent(ThirdScreenActivity .this, MainActivity.class);
                                 finish();
                                 startActivity(backToSquareOne);
