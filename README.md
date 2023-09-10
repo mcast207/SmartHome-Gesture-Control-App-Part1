@@ -39,3 +39,6 @@ python3 flaskServer.py
 
 Flask server will run at ip address 0.0.0.0 but will resolve it to a different ip address.
  - Copy the last shown IP address and paste it on line 90 of the ThirdScreenActivity.java located at: SmartHomeGestureControlApplicationPart1MiguelCastillo/app/src/main/java/com/example/smarthomegesturecontrolapplication_part1_miguelcastillo/ThirdScreenActivity.java
+
+## Author
+Miguel Castillo ID: 1224116335
