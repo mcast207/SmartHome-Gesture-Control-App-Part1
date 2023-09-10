@@ -1,10 +1,10 @@
 # SmartHome Gesture Control App
 This is the first part project for an android application that records user
+gestures and uploads it to a flask server.
 
 ## YouTube Link
 https://youtu.be/yNJ0Mco1I88
 
-gestures and uploads it to a flask server.
 
 ## To run flask server
 Navigate to the flaskServer folder.
