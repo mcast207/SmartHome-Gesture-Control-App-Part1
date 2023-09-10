@@ -1,7 +1,5 @@
 package com.example.smarthomegesturecontrolapplication_part1_miguelcastillo;
 
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -30,9 +30,11 @@ public class ThirdScreenActivity extends AppCompatActivity {
     Button uploadButton;
     Button relearnButton;
     String userLastName = "CASTILLO";
+    Integer COUNTER_ONE = 1;
     Uri practiceVideoUri;
     VideoView practiceVideoView;
 
+    public static Map<String, Integer> countPracticeNumber = new HashMap<>();
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -63,10 +65,18 @@ public class ThirdScreenActivity extends AppCompatActivity {
 
         uploadButton = findViewById(R.id.uploadButton);
 
-        httpMultiFromRequestBody(getIntent().getStringExtra("file path"));
+        httpMultiFromRequestBody(getIntent().getStringExtra("file path"), backToMainIntent);
     }
 
-    public void httpMultiFromRequestBody(String videoUri){
+    public void httpMultiFromRequestBody(String videoUri, Intent backToMainIntent){
+
+        //Use a hash map to keep track of the practice count number
+        if(countPracticeNumber.get(practiceFileNameGesture) == null){
+            countPracticeNumber.put(practiceFileNameGesture, COUNTER_ONE);
+        }else{
+            Integer counterNum = countPracticeNumber.get(practiceFileNameGesture);
+            countPracticeNumber.put(practiceFileNameGesture, counterNum + COUNTER_ONE);
+        }
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,8 +86,8 @@ public class ThirdScreenActivity extends AppCompatActivity {
                     requestPermissions(permissions, 1);
                 }
 
-                //Flask will resolve this ip address
-                String postUrl = "http://" + "192.168.1.67" + ":" + "5000" + "/uploadVideo";
+                //Flask server ip and port address
+                String postUrl = "http://" + "192.168.1.102" + ":" + "5000" + "/uploadVideo";
 
                 File streamData = null;
                 RequestBody postBody = null;
@@ -88,11 +98,11 @@ public class ThirdScreenActivity extends AppCompatActivity {
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("image",
                                     practiceFileNameGesture + "_PRACTICE_"  +
-                                            getPracticeNumber(practiceFileNameGesture) + "_" + userLastName + ".mp4", RequestBody.create(MediaType.parse("video/*"), streamData))
+                                            countPracticeNumber.get(practiceFileNameGesture) + "_" + userLastName + ".mp4", RequestBody.create(MediaType.parse("video/*"), streamData))
                             .build();
 
-                } catch (Exception ioexp) {
-                    ioexp.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
 
                 OkHttpClient client = new OkHttpClient();
@@ -107,7 +117,7 @@ public class ThirdScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ThirdScreenActivity.this, "ERROR: Connection was not established", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ThirdScreenActivity.this, "ERROR: Connection was not established, check that your Flask server is running with the correct IP address", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -117,10 +127,9 @@ public class ThirdScreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(ThirdScreenActivity.this, "Video successfully uploaded!", Toast.LENGTH_SHORT).show();
-                                Intent backToSquareOne = new Intent(ThirdScreenActivity .this, MainActivity.class);
+                                Toast.makeText(ThirdScreenActivity.this, "Video successfully uploaded to Flask server!", Toast.LENGTH_SHORT).show();
                                 finish();
-                                startActivity(backToSquareOne);
+                                startActivity(backToMainIntent);
                             }
                         });
                     }
@@ -129,23 +138,5 @@ public class ThirdScreenActivity extends AppCompatActivity {
         });
 
     }
-
-    public int getPracticeNumber(String practiceFileNameGesture){
-        SharedPreferences preferences = getSharedPreferences("practiceNumberPreference", MODE_PRIVATE);
-
-        int practiceCounter = 0;
-
-        if(preferences.contains(practiceFileNameGesture)){
-            practiceCounter= preferences.getInt(practiceFileNameGesture,0)+1;
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(practiceFileNameGesture,practiceCounter);
-            editor.apply();
-        }else{
-            practiceCounter=1;
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt(practiceFileNameGesture,practiceCounter);
-            editor.apply();
-        }
-        return practiceCounter;
-    }
 }
+

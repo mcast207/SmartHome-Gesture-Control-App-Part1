@@ -14,6 +14,7 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.VideoView;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -170,7 +171,7 @@ public class SecondScreenActivity extends AppCompatActivity {
             }
         }
         else {
-            File file = new File(Environment.getExternalStorageDirectory(), "projectVideos");
+            File file = new File(Environment.getExternalStorageDirectory().getPath(), "projectVideos");
 
             if (!file.exists()) {
                 file.mkdirs();
@@ -178,9 +179,9 @@ public class SecondScreenActivity extends AppCompatActivity {
 
             File practiceFileVideo = new File(Environment.getExternalStorageDirectory().getPath() + "/projectVideos/" + practiceFileNameGesture + "_PRACTICE_" +  userLastName + ".mp4");
             Intent recordPracticeVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-//            recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
-//        recordPracticeVideo.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
-//        recordPracticeVideo.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
+            recordPracticeVideo.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+            recordPracticeVideo.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+            recordPracticeVideo.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
             recordPracticeVideo.putExtra(MediaStore.EXTRA_OUTPUT, practiceFileVideo.getPath());
             recordPracticeVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);//Record for max 5 seconds
             recordPracticeVideo.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//Record for max 5 seconds

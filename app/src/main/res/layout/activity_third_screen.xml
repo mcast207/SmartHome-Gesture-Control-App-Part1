@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:textAlignment="center">
 
     <VideoView
         android:id="@+id/practiceVideoView"
-        android:layout_width="315dp"
-        android:layout_height="519dp"
+        android:layout_width="401dp"
+        android:layout_height="602dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="72dp"
         android:layout_marginEnd="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,5 +47,21 @@
             android:layout_height="wrap_content"
             android:text="@string/uploadButton" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/practiveTextBox"
+        android:layout_width="329dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="109dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="104dp"
+        android:layout_marginBottom="9dp"
+        android:text="@string/practiceTextbox"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/practiceVideoView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

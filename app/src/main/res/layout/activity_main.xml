@@ -8,10 +8,12 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="408dp"
+        android:layout_height="113dp"
         android:text="@string/mainScreenHeader"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,12 +22,14 @@
 
     <Spinner
         android:id="@+id/dropdown_spinner"
-        android:layout_width="307dp"
-        android:layout_height="24dp"
+        android:layout_width="355dp"
+        android:layout_height="48dp"
         android:layout_marginStart="61dp"
-        android:layout_marginTop="122dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="43dp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.687"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -37,24 +41,26 @@
         android:layout_marginTop="11dp"
         android:layout_marginEnd="127dp"
         android:text="@string/subHeader"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
         android:id="@+id/startButton"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="341dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginStart="106dp"
+        android:layout_marginEnd="106dp"
+        android:layout_marginBottom="348dp"
         android:text="@string/startButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dropdown_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.884" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

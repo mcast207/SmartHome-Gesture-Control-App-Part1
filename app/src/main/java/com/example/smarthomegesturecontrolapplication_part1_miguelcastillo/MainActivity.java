@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v){
                 //Create intent to bring user to second screen
-                Toast toast = Toast.makeText(MainActivity.this, gestureName, duration);
-                toast.show();
                 Intent SecondScreenActivity = new Intent(MainActivity.this, SecondScreenActivity.class);
                 SecondScreenActivity.putExtra("Gesture Name", gestureName);
                 startActivity(SecondScreenActivity);

@@ -10,7 +10,7 @@
     <string name="practiceButton">PRACTICE</string>
     <string name="restartButton">RESTART</string>
     <string name="relearnButton">RESTART</string>
-
+    <string name ="practiceTextbox">Your Practice Attempt</string>
     <string name="uploadButton">UPLOAD</string>
 
     <string-array name="gestureSelectionList">
